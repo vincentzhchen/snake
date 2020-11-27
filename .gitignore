@@ -35,3 +35,6 @@ bin/*
 
 # Build directory
 build/
+
+# Editor temporary/working/backup files
+.vscode/
