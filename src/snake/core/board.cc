@@ -56,8 +56,8 @@ void Board::update_snake_position(Snake *snake_inst) {
   std::vector<int> snake_pos_y = snake_inst->get_snake_pos_y();
   int snake_len = snake_inst->get_snake_length();
 
-  int head_x = snake_pos_x[0];
-  int head_y = snake_pos_y[0];
+  int head_x = snake_inst->get_snake_head_x();
+  int head_y = snake_inst->get_snake_head_y();
 
   if (board[head_y][head_x] != ' ') {
     state->mark_apple_eaten();
@@ -67,7 +67,7 @@ void Board::update_snake_position(Snake *snake_inst) {
   for (int i = 0; i < snake_len; i++) {
     int x = snake_pos_x[i];
     int y = snake_pos_y[i];
-    board[x][y] = snake_inst->get_tail_char();
+    board[y][x] = snake_inst->get_tail_char();
   }
 
   board[head_y][head_x] = snake_inst->get_head_char();

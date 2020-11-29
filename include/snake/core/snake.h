@@ -14,6 +14,8 @@ class Snake {
 
   std::vector<int> get_snake_pos_x();
   std::vector<int> get_snake_pos_y();
+  int get_snake_head_x();
+  int get_snake_head_y();
   int get_snake_length();
   void add_length();
 
@@ -27,7 +29,7 @@ class Snake {
   // TODO: set config for max tail length
   std::vector<int> snake_pos_x;
   std::vector<int> snake_pos_y;
-  int snake_length = 0;
+  int snake_length = 1;
   GameState *state;
 
   // snake shape
