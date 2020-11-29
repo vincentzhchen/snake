@@ -5,8 +5,8 @@
 Snake::Snake(int x, int y, GameState *s) {
   head_x = x;
   head_y = y;
-  snake_pos_x.push_back(head_x);
-  snake_pos_y.push_back(head_y);
+  state = s;
+
   update_position();
 }
 
