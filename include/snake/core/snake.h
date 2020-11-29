@@ -2,6 +2,8 @@
 
 #include <snake/core/game_state.h>
 
+#include <vector>
+
 class Snake {
  public:
   Snake(int x, int y, GameState *state);  // constructor
@@ -10,9 +12,10 @@ class Snake {
   void move_left(int board_width);
   void move_right(int board_width);
 
-  int *get_snake_pos_x();
-  int *get_snake_pos_y();
+  std::vector<int> get_snake_pos_x();
+  std::vector<int> get_snake_pos_y();
   int get_snake_length();
+  void add_length();
 
   // snake shape
   char get_head_char();
@@ -22,8 +25,8 @@ class Snake {
   int head_x;
   int head_y;
   // TODO: set config for max tail length
-  int snake_pos_x[100];
-  int snake_pos_y[100];
+  std::vector<int> snake_pos_x;
+  std::vector<int> snake_pos_y;
   int snake_length = 0;
   GameState *state;
 

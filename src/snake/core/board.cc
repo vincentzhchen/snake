@@ -52,8 +52,8 @@ int Board::get_board_width() { return width; }
  */
 void Board::update_snake_position(Snake *snake_inst) {
   // put new position
-  int *snake_pos_x = snake_inst->get_snake_pos_x();
-  int *snake_pos_y = snake_inst->get_snake_pos_y();
+  std::vector<int> snake_pos_x = snake_inst->get_snake_pos_x();
+  std::vector<int> snake_pos_y = snake_inst->get_snake_pos_y();
   int snake_len = snake_inst->get_snake_length();
 
   int head_x = snake_pos_x[0];
@@ -61,15 +61,16 @@ void Board::update_snake_position(Snake *snake_inst) {
 
   if (board[head_y][head_x] != ' ') {
     state->mark_apple_eaten();
+    snake_inst->add_length();
+  }
+
+  for (int i = 0; i < snake_len; i++) {
+    int x = snake_pos_x[i];
+    int y = snake_pos_y[i];
+    board[x][y] = snake_inst->get_tail_char();
   }
 
   board[head_y][head_x] = snake_inst->get_head_char();
-  for (int i = 1; i < snake_len; i++) {
-    int x = snake_pos_x[i];
-    int y = snake_pos_y[i];
-
-    board[x][y] = snake_inst->get_tail_char();
-  }
 }
 
 /**
