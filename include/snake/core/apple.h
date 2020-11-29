@@ -2,8 +2,11 @@
 
 class Apple {
  public:
-  int get_apple_pos_x(int board_width);
-  int get_apple_pos_y(int board_height);
+  Apple(int x, int y);  // constructor
+  int get_apple_pos_x();
+  int get_apple_pos_y();
+  int get_new_apple_pos_x(int board_width);
+  int get_new_apple_pos_y(int board_height);
 
   // apple shape
   char get_apple_char();

@@ -5,9 +5,10 @@
 /**
  * Construct a board on instantiation.
  */
-Board::Board(int h, int w) {
+Board::Board(int h, int w, GameState *s) {
   height = h;
   width = w;
+  state = s;
   initialize_board(height, width);
 }
 
@@ -49,40 +50,52 @@ int Board::get_board_width() { return width; }
  * Snake instance knows how to construct the right coordinates.  Board
  * instance should only be concerned about placing the snake.
  */
-void Board::update_snake_position(Snake snake_inst) {
-  set_board(empty_board);  // copy empty board
-
+void Board::update_snake_position(Snake *snake_inst) {
   // put new position
-  int *snake_pos_x = snake_inst.get_snake_pos_x();
-  int *snake_pos_y = snake_inst.get_snake_pos_y();
-  int snake_len = snake_inst.get_snake_length();
+  int *snake_pos_x = snake_inst->get_snake_pos_x();
+  int *snake_pos_y = snake_inst->get_snake_pos_y();
+  int snake_len = snake_inst->get_snake_length();
 
   int head_x = snake_pos_x[0];
   int head_y = snake_pos_y[0];
 
-  board[head_y][head_x] = snake_inst.get_head_char();
+  if (board[head_y][head_x] != ' ') {
+    state->mark_apple_eaten();
+  }
+
+  board[head_y][head_x] = snake_inst->get_head_char();
   for (int i = 1; i < snake_len; i++) {
     int x = snake_pos_x[i];
     int y = snake_pos_y[i];
 
-    board[x][y] = snake_inst.get_tail_char();
+    board[x][y] = snake_inst->get_tail_char();
   }
 }
 
 /**
  * Place an apple at a valid location.
  */
-void Board::update_apple_position(Apple &apple_inst) {
-  // if apple is not eaten, no update necessary
+void Board::update_apple_position(Apple *apple_inst) {
+  set_board(empty_board);  // copy empty board
+  // if apple is not eaten, no update necessary, use current position
+  if (!state->is_apple_eaten()) {
+    int x = apple_inst->get_apple_pos_x();
+    int y = apple_inst->get_apple_pos_y();
+    board[y][x] = apple_inst->get_apple_char();
 
-  bool is_placed = false;
-  while (!is_placed) {
-    // while apple is not placed, get new apple position and attempt to place
-    int x = apple_inst.get_apple_pos_x(get_board_width());
-    int y = apple_inst.get_apple_pos_y(get_board_height());
+  } else {
+    // if apple is eaten, get position of new apple
+    bool is_placed = false;
+    while (!is_placed) {
+      // while apple is not placed, get new apple position and attempt to place
+      int x = apple_inst->get_new_apple_pos_x(get_board_width());
+      int y = apple_inst->get_new_apple_pos_y(get_board_height());
 
-    if (board[y][x] == ' ') board[y][x] = apple_inst.get_apple_char();
-    is_placed = true;
+      if (board[y][x] == ' ') board[y][x] = apple_inst->get_apple_char();
+      is_placed = true;
+    }
+
+    state->mark_apple_exists();
   }
 }
 
@@ -90,6 +103,7 @@ void Board::update_apple_position(Apple &apple_inst) {
  * Prints map to console.
  */
 void Board::draw() {
+  system("clear");
   for (int i = 0; i < height; i++) {
     for (int j = 0; j < width; j++) {
       std::cout << board[i][j];

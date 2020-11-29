@@ -1,7 +1,7 @@
 #include <snake/core/snake.h>
 
 #include <iostream>
-Snake::Snake(int x, int y) {
+Snake::Snake(int x, int y, GameState *s) {
   head_x = x;
   head_y = y;
   update_position();
@@ -10,26 +10,37 @@ Snake::Snake(int x, int y) {
 void Snake::move_up(int board_height) {
   head_y--;
   if (head_y <= 0) head_y = board_height - 2;
-
-  update_position();
+  if (is_hit_itself())
+    state->mark_as_game_over();
+  else
+    update_position();
 }
 
 void Snake::move_down(int board_height) {
   head_y++;
   if (head_y >= board_height - 1) head_y = 1;
-  update_position();
+  if (is_hit_itself())
+    state->mark_as_game_over();
+  else
+    update_position();
 }
 
 void Snake::move_left(int board_width) {
   head_x--;
   if (head_x <= 0) head_x = board_width - 2;
-  update_position();
+  if (is_hit_itself())
+    state->mark_as_game_over();
+  else
+    update_position();
 }
 
 void Snake::move_right(int board_width) {
   head_x++;
   if (head_x >= board_width - 1) head_x = 1;
-  update_position();
+  if (is_hit_itself())
+    state->mark_as_game_over();
+  else
+    update_position();
 }
 
 void Snake::update_position() {
@@ -45,6 +56,12 @@ void Snake::update_position() {
     prev_x = tmp_x;
     prev_y = tmp_y;
   }
+}
+
+bool Snake::is_hit_itself() {
+  for (int i = 0; i < snake_length; i++)
+    if (snake_pos_x[i] == head_x && snake_pos_y[i] == head_y) return true;
+  return false;
 }
 
 int *Snake::get_snake_pos_x() { return snake_pos_x; }

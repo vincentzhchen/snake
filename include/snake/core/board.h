@@ -1,17 +1,18 @@
 #pragma once
 
 #include <snake/core/apple.h>
+#include <snake/core/game_state.h>
 #include <snake/core/snake.h>
 
 #include <vector>
 
 class Board {
  public:
-  Board(int width, int height);  // constructor
+  Board(int width, int height, GameState *state);  // constructor
   int get_board_height();
   int get_board_width();
-  void update_snake_position(Snake snake_inst);
-  void update_apple_position(Apple &apple_inst);
+  void update_snake_position(Snake *snake_inst);
+  void update_apple_position(Apple *apple_inst);
   void draw();
 
  private:
@@ -19,6 +20,7 @@ class Board {
   int height;  // num rows
   std::vector<std::vector<char>> empty_board;
   std::vector<std::vector<char>> board;
+  GameState *state;
 
   void initialize_board(int height, int width);
   void set_board(std::vector<std::vector<char>> b);
