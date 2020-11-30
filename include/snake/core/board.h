@@ -24,7 +24,7 @@
 
 class Board {
  public:
-  Board(int width, int height, GameState *state);  // constructor
+  Board(int height, int width, GameState *state);  // constructor
   int get_board_height();
   int get_board_width();
   void update_snake_position(Snake *snake_inst);
