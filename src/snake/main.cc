@@ -18,7 +18,7 @@
 #include <snake/core/board.h>
 #include <snake/core/game_state.h>
 #include <snake/core/snake.h>
-#include <snake/util/kb_io.h>
+#include <snake/util/movement.h>
 #include <unistd.h>
 
 #include <iostream>
@@ -39,40 +39,26 @@ int main() {
 
   board_inst.draw();
 
-  enum Direction { UP, DOWN, LEFT, RIGHT };
-  Direction d;
+  Movement move_state;  // controls current direction of movement
   while (!state->is_game_over()) {
-    enable_raw_mode();
-    if (kbhit()) {
-      switch (getch()) {
-        case 'w':
-          d = UP;
-          break;
-        case 's':
-          d = DOWN;
-          break;
-        case 'a':
-          d = LEFT;
-          break;
-        case 'd':
-          d = RIGHT;
-          break;
-      }
-    }
-    disable_raw_mode();
+    move_state.update_direction();
 
-    if (d == UP) snake_inst->move_up(board_inst.get_board_height());
-    if (d == DOWN) snake_inst->move_down(board_inst.get_board_height());
-    if (d == LEFT) snake_inst->move_left(board_inst.get_board_width());
-    if (d == RIGHT) snake_inst->move_right(board_inst.get_board_width());
+    if (move_state.is_up()) {
+      snake_inst->move_up(board_inst.get_board_height());
+    } else if (move_state.is_down()) {
+      snake_inst->move_down(board_inst.get_board_height());
+    } else if (move_state.is_left()) {
+      snake_inst->move_left(board_inst.get_board_width());
+    } else if (move_state.is_right()) {
+      snake_inst->move_right(board_inst.get_board_width());
+    }
 
     board_inst.update_apple_position(apple_inst);
     board_inst.update_snake_position(snake_inst);
     board_inst.draw();
 
     std::cout << "SCORE: " << state->get_score() << std::endl;
-    // std::cout << snake_inst->get_snake_pos_x().size() << std::endl;
-    usleep(200000);  // sleep(10);
+    usleep(200000);  // this is in microseconds
   }
   return 0;
 }

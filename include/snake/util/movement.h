@@ -15,3 +15,23 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #pragma once
+
+#include <snake/util/kb_io.h>
+
+namespace dirns {
+enum Direction { UP, DOWN, LEFT, RIGHT, NONE };
+}
+
+class Movement {
+ public:
+  void update_direction();
+  bool is_up();
+  bool is_down();
+  bool is_left();
+  bool is_right();
+
+ private:
+  dirns::Direction curr_direction = dirns::Direction::NONE;
+
+  dirns::Direction get_direction();
+};
