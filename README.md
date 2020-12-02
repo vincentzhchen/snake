@@ -1,2 +1,2 @@
 # snake
-Console snake game.
+Snake console game.
